@@ -18,8 +18,14 @@ class User
      */
     public function __construct()
     {
-        $this->app = new App();      
-        $this->pdo = $this->app->make('db::connect');  
+
+        try {
+            $this->app = new App();
+            $this->pdo = $this->app->make('db::connect');
+        } catch (Exception $e) {
+            throw new \RuntimeException($e->getMessage());
+        }
+
     }
 
     /**

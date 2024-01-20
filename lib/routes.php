@@ -3,17 +3,17 @@
 $router = new Router\Router();
 
 $router->add_route('/', function () {
-    echo 'Hello World';
+    require BASE_DIRECTORY_URI . '/lib/App/View/hello-world.php';
 });
 
 $router->add_route('/users', function () {
-    $users = new App\Controller\User();
-    var_dump($users->index());
-});
+    try {
+        $users = new App\Controller\User();
+        $users->index();
+    } catch (RuntimeException $e) {
+        echo $e->getMessage();
+    }
 
-$router->add_route('/books', function () {
-    $books = new App\Controller\Book();
-    var_dump($books->index());
 });
 
 $router->add_route('/mysql', function () {

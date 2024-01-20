@@ -27,11 +27,12 @@ class Router
     {
         $path = $_SERVER['REQUEST_URI'];
         $action = $this->routes[$path] ?? false;
+
         if($action === false):
             require BASE_DIRECTORY_URI . '/lib/App/View/404.php';
             exit;
         endif;
 
-        echo $action();
+        $action();
     }
 }
