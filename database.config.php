@@ -1,7 +1,7 @@
 <?php
 
-DEFINE ('DB', 'mysql');
-DEFINE ('DB_NAME', 'library101');
-DEFINE ('DB_HOST', 'localhost');
-DEFINE ('DB_USER', 'TimothyRoth');
-DEFINE ('DB_PASS', 'Zyrakim2!');
+const DB = 'mysql';
+const DB_NAME = 'library101';
+const DB_HOST = 'localhost';
+const DB_USER = 'TimothyRoth';
+const DB_PASS = 'Zyrakim2!';

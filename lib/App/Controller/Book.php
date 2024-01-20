@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\App;
 use Exception;
 use \PDO;
+use App\Model\Book as Model;
 
 class Book
 {
@@ -12,6 +13,9 @@ class Book
     private App $app;
     private PDO $pdo;
 
+    /**
+     * @throws Exception
+     */
     public function __construct()
     {
         $this->app = new App();        
@@ -20,22 +24,22 @@ class Book
 
     /**
     * @return array
-    * @throws \Exception
+    * @throws Exception
     */
 
-    public function index()
+    public function index(): array
     {
         $sql = "SELECT * FROM books";
 
         try {
             $stmt = $this->pdo->query($sql);
-            $stmt->setFetchMode(PDO::FETCH_CLASS, 'App\Model\Book');
+            $stmt->setFetchMode(PDO::FETCH_CLASS, Model::class);
     
             if($stmt->rowCount() > 0):
                 return $stmt->fetchAll();
             endif; 
         } catch (\PDOException $e) {
-            throw new Exception($e->getMessage());
+            throw new \RuntimeException($e->getMessage());
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Exception;
 use \PDO;
 
 class App
@@ -19,10 +20,10 @@ class App
     /**
      * @param string $entity
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
     */
 
-    public function make($entity)
+    public function make(string $entity)
     {
         if (!isset($this->instances[$entity])) {
             $method = $this->factoryMethods[$entity];
@@ -37,7 +38,7 @@ class App
      * @return PDO
     */
 
-    private function connectDatabase()
+    private function connectDatabase(): PDO
     {
         require __DIR__ . '/../../database.config.php';
         return new PDO(DB . ':host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS);
@@ -45,10 +46,10 @@ class App
 
     /**
      * @param string $sql
-     * @param string|null $classModel
-     * @return array
-     * @throws \Exception
-    */
+     * @param mixed|null $classModel
+     * @return string
+     * @throws Exception
+     */
 
     public function mysql(string $sql, mixed $classModel = null)
     {
@@ -56,10 +57,12 @@ class App
 
             $stmt = $this->make('db::connect')->prepare($sql);
             $stmt->execute();
+            $normalized_sql = strtolower($sql);
 
-            if(substr(strtolower($sql), 0, 6) === 'select' || substr(strtolower($sql), 0, 4) ===  'show' || substr(strtolower($sql), 0, 4) ===  'desc') {
-                if($classModel !== null)
+            if(stripos($normalized_sql, 'select') === 0 || stripos($normalized_sql, 'show') === 0 || stripos($normalized_sql, 'desc') === 0) {
+                if($classModel !== null):
                     $stmt->setFetchMode(PDO::FETCH_CLASS, $classModel);
+                endif;
 
                 if($stmt->rowCount() > 0):
                     return $stmt->fetchAll();
@@ -69,7 +72,7 @@ class App
             return "<b>Query:</b> <i>\"{$sql}\"</i>, executed successfully.";
            
         } catch (\PDOException $e) {
-            throw new \Exception($e->getMessage());
+            throw new \RuntimeException($e->getMessage());
         }
     }
 }

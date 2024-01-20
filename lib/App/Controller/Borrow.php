@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\App;
 use \PDO;
+use Exception;
+use App\Model\Borrow as Model;
 
 class Borrow
 {
@@ -11,6 +13,9 @@ class Borrow
     private App $app;
     private PDO $pdo;
 
+    /**
+     * @throws Exception
+     */
     public function __construct()
     {
         $this->app = new App();        
@@ -19,22 +24,22 @@ class Borrow
 
     /**
     * @return array
-    * @throws \Exception
+    * @throws Exception
     */
 
-    public function index()
+    public function index(): array
     {
         $sql = "SELECT * FROM borrows";
 
         try {
             $stmt = $this->pdo->query($sql);
-            $stmt->setFetchMode(PDO::FETCH_CLASS, 'App\Model\Borrow');
+            $stmt->setFetchMode(PDO::FETCH_CLASS, Model::class);
     
             if($stmt->rowCount() > 0):
                 return $stmt->fetchAll();
             endif;
         } catch(\PDOException $e) {
-            throw new \Exception($e->getMessage());
+            throw new \RuntimeException($e->getMessage());
         }
        
     }
