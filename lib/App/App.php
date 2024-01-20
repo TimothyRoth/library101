@@ -12,7 +12,7 @@ class App
 
     public function __construct()
     {
-        $this->factoryMethods = [ 
+        $this->factoryMethods = [
             'db::connect' => [$this, 'connectDatabase'],
         ];
     }
@@ -21,9 +21,9 @@ class App
      * @param string $entity
      * @return mixed
      * @throws Exception
-    */
+     */
 
-    public function make(string $entity)
+    public function make(string $entity): mixed
     {
         if (!isset($this->instances[$entity])) {
             $method = $this->factoryMethods[$entity];
@@ -36,41 +36,44 @@ class App
     /**
      * @requires database.config.php
      * @return PDO
-    */
+     */
 
     private function connectDatabase(): PDO
     {
-        require __DIR__ . '/../../database.config.php';
         return new PDO(DB . ':host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS);
     }
 
     /**
      * @param string $sql
      * @param mixed|null $classModel
-     * @return string
+     * @return array|string
      * @throws Exception
      */
 
-    public function mysql(string $sql, mixed $classModel = null)
+    public function mysql(string $sql, mixed $classModel = null): array|string
     {
         try {
 
             $stmt = $this->make('db::connect')->prepare($sql);
             $stmt->execute();
             $normalized_sql = strtolower($sql);
-
-            if(stripos($normalized_sql, 'select') === 0 || stripos($normalized_sql, 'show') === 0 || stripos($normalized_sql, 'desc') === 0) {
-                if($classModel !== null):
+            echo $normalized_sql;
+            if (stripos($normalized_sql, 'select') === 0 || stripos($normalized_sql, 'show') === 0 || stripos($normalized_sql, 'desc') === 0) {
+                if ($classModel !== null):
                     $stmt->setFetchMode(PDO::FETCH_CLASS, $classModel);
                 endif;
 
-                if($stmt->rowCount() > 0):
-                    return $stmt->fetchAll();
-                endif;   
+                $result = $stmt->fetchAll();
+
+                if (count($result) === 1):
+                    return $result[0];
+                endif;
+
+                return $result;
             }
 
             return "<b>Query:</b> <i>\"{$sql}\"</i>, executed successfully.";
-           
+
         } catch (\PDOException $e) {
             throw new \RuntimeException($e->getMessage());
         }

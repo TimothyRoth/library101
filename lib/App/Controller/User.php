@@ -3,9 +3,9 @@
 namespace App\Controller;
 
 use App\App;
-use \PDO;
-use Exception;
 use App\Model\User as Model;
+use Exception;
+use PDO;
 
 class User
 {

@@ -3,9 +3,9 @@
 namespace App\Controller;
 
 use App\App;
-use Exception;
-use \PDO;
 use App\Model\Book as Model;
+use Exception;
+use PDO;
 
 class Book
 {
