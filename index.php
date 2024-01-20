@@ -11,15 +11,15 @@ use App\Controller\User;
 $usersController= new User();
 $app = new App(); ?>
 
-<table>
-    <thead>
+    <table>
+        <thead>
         <tr>
             <th>Firstname</th>
             <th>Lastname</th>
             <th>ID</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         <?php foreach($usersController->index() as $user): ?>
             <tr>
                 <td><?php echo ucfirst($user->firstname); ?></td>
@@ -27,6 +27,6 @@ $app = new App(); ?>
                 <td><?php echo $user->id; ?></td>
             </tr>
         <?php endforeach; ?>
-    </tbody>
-</table>
+        </tbody>
+    </table>
 <?php
