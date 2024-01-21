@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Controller\User as UserController;
 use Exception;
 use \PDO;
 
@@ -12,8 +13,14 @@ class App
 
     public function __construct()
     {
+
+        /**
+         * Bind methods to the factoryMethods array
+         */
+
         $this->factoryMethods = [
-            'db::connect' => [$this, 'connectDatabase'],
+            'db::connect' => [$this, 'connectPDO'],
+            'user::controller' => [$this, 'userController'],
         ];
     }
 
@@ -31,14 +38,28 @@ class App
         }
 
         return $this->instances[$entity];
+
     }
+
+    /**
+     * Define methods for your controllers
+     */
+
+     private function userController(): UserController
+     {
+         return new UserController();
+     }
+
+    /**
+     * Define methods for your database connections
+     */
 
     /**
      * @requires database.config.php
      * @return PDO
      */
 
-    private function connectDatabase(): PDO
+    private function connectPDO(): PDO
     {
         return new PDO(DB . ':host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS);
     }

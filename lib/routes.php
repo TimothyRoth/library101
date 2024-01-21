@@ -1,22 +1,28 @@
 <?php
 
 $router = new Router\Router();
+$app = new App\App();
 
-$router->add_route('/', function () {
+$router->add('GET', '/', function () {
     require BASE_DIRECTORY_URI . '/lib/App/View/hello-world.php';
 });
 
-$router->add_route('/users', function () {
+$router->add('POST', '/', function() {
+    // ... insert view
+    print_r("POST request made");
+});
+
+$router->add('GET', '/users', function () use ($app) {
     try {
-        $users = new App\Controller\User();
+        $users = $app->make('user::controller');
         $users->index();
+        echo "users.php";
     } catch (RuntimeException $e) {
         echo $e->getMessage();
     }
-
 });
 
-$router->add_route('/mysql', function () {
+$router->add('GET', '/mysql', function () {
     require BASE_DIRECTORY_URI . '/lib/App/View/mysql.php';
 });
 
