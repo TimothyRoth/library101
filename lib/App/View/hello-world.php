@@ -1,6 +1,6 @@
 
-<form method="POST">
-    <input type="text" name="name" placeholder="Name">
-    <input type="text" name="email" placeholder="Email">
+<form method="POST" action="/">
+    <input type="text" name="name" placeholder="Name" required>
+    <input type="email" name="email" placeholder="Email" required>
     <input type="submit" value="Submit">
 </form>

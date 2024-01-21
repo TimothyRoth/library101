@@ -8,8 +8,8 @@ $router->add('GET', '/', function () {
 });
 
 $router->add('POST', '/', function() {
-    // ... insert view
-    print_r("POST request made");
+    echo "Name: {$_POST['name']} <br /> E-Mail: {$_POST['email']}";
+    require BASE_DIRECTORY_URI . '/lib/App/View/hello-world.php';
 });
 
 $router->add('GET', '/users', function () use ($app) {

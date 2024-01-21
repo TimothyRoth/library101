@@ -26,7 +26,7 @@ class Router
          }
      
          $key = $nMethod . ':' . $route;
-     
+
          if (isset($this->routes[$key])) {
              throw new Exception('Route already exists');
          }
@@ -60,18 +60,11 @@ class Router
         $action();
     }
     
-
     /*
      * @return void
-     * @throws Exception
      * */
 
-    public function get_routes(): array
-    {
-        return $this->routes;
-    }
-
-    private function abort(string $code)
+    private function abort(string $code): void
     {
         http_response_code((int) $code) ;
         require BASE_DIRECTORY_URI . "/lib/App/View/{$code}.php";
