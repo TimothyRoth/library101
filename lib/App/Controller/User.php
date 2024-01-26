@@ -47,6 +47,8 @@ class User
         } catch (\PDOException $e) {
             throw new \RuntimeException($e->getMessage());
         }
+
+        return [];
     }
 
 }

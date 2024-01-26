@@ -3,6 +3,7 @@
 namespace Router;
 
 use Exception;
+use JetBrains\PhpStorm\NoReturn;
 
 class Router
 {
@@ -18,7 +19,7 @@ class Router
      * @throws Exception
      * */
 
-     public function add($method = null, string $route, callable $action): void
+    public function add($method = null, string $route, callable $action): void
      {
          $nMethod = strtoupper($method);
          if (!in_array($nMethod, $this->allowedMethods, true)) {
@@ -45,7 +46,7 @@ class Router
         $path = $_SERVER['REQUEST_URI'];
         $method = $_SERVER['REQUEST_METHOD'];
     
-        if (strpos($path, '?') !== false) {
+        if (str_contains($path, '?')) {
             $path = substr($path, 0, strpos($path, '?'));
         }
     
@@ -61,10 +62,12 @@ class Router
     }
     
     /*
+     * @param string $code
      * @return void
+     * @throws Exception
      * */
 
-    private function abort(string $code): void
+    #[NoReturn] private function abort(string $code): void
     {
         http_response_code((int) $code) ;
         require BASE_DIRECTORY_URI . "/lib/App/View/{$code}.php";
